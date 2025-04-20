@@ -116,6 +116,6 @@ def main(folder, model_filename="model.pkl"):
 
 if __name__ == "__main__":
     folder = "/Users/massimozhang/Downloads/2DMatGMM-main/Datasets/GMMDetectorDatasets/Graphene/train_images"
-    folder="/Users/massimozhang/Desktop/coding/Ma Lab/Flake_searching_deep/deep_learning_data"
-    model_file = "/Users/massimozhang/Desktop/coding/Ma Lab/Flake_searching_deep/grey_scale_method/decision_tree_model.pkl"
+    # folder="/Users/massimozhang/Desktop/coding/Ma Lab/Flake_searching_deep/deep_learning_data"
+    model_file = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/grey_scale_method/trial_1_data/decision_tree_model.pkl"
     main(folder,model_filename=model_file)

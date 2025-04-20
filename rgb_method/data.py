@@ -165,6 +165,6 @@ def main(folder=None):
 
 
 if __name__ == "__main__":
-    pathname="/Users/massimozhang/Desktop/coding/Ma Lab/Flake_searching_deep/deep_learning_data"
+    pathname="/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/TIT_data/100x"
     main(folder=pathname)
 

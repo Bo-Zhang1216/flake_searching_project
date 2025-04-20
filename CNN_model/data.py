@@ -5,8 +5,8 @@ import numpy as np
 
 # === CONFIGURATION ===
 # Update these paths with your actual directories.
-original_images_folder = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/test_data"   # Folder with your original images
-masks_folder = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/generated_masks"       # Folder with generated masks and metadata file "masks_metadata.json"
+original_images_folder = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/deep_learning_data"   # Folder with your original images
+masks_folder = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/generated_masks_2"       # Folder with generated masks and metadata file "masks_metadata.json"
 output_folder = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/CNN_model/annotations" # Folder where annotated outputs will be saved
 
 # Output subfolders
@@ -32,6 +32,7 @@ annotations = {}  # Will store annotation info for each image
 current_image = None   # The original image (BGR)
 current_masks = []     # List of dicts for annotation (non-background masks)
 current_background_path = None  # Path of the pre-saved background mask
+click_handled = False  # Flag to debounce clicks
 
 def load_image_and_masks(image_filename):
     """Load the original image and its corresponding masks using the metadata.
@@ -102,14 +103,22 @@ def draw_overlay():
     return overlay
 
 def mouse_callback(event, x, y, flags, param):
-    """Mouse callback to toggle the selection of a mask when clicked."""
-    global current_masks
-    if event == cv2.EVENT_LBUTTONDOWN:
-        # Iterate in reverse so that if masks overlap, the topmost (last drawn) is toggled.
+    """Mouse callback to toggle the selection of a mask when clicked.
+       Only processes clicks on the left half of the combined image (overlay)."""
+    global current_masks, current_image, click_handled
+    img_width = current_image.shape[1]
+    if event == cv2.EVENT_LBUTTONDOWN and not click_handled:
+        # Only process clicks within the left half.
+        if x >= img_width:
+            return
+        # Process the click using the coordinates at the moment of click.
         for m in reversed(current_masks):
             if m["mask"][y, x] > 0:
                 m["selected"] = not m["selected"]
                 break
+        click_handled = True  # Mark this click as handled
+    elif event == cv2.EVENT_LBUTTONUP:
+        click_handled = False  # Reset when mouse button is released
 
 def save_annotations(image_filename):
     """Save the annotations for the current image.
@@ -154,9 +163,9 @@ def show_navigating_message():
     """Display an overlay with 'navigating' text and block keys until a new image is loaded."""
     nav_overlay = draw_overlay()
     cv2.putText(nav_overlay, "navigating", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 255), 2)
-    cv2.imshow("Annotator", nav_overlay)
-    # Block for 1 second.
-    cv2.waitKey(1000)
+    combined = np.hstack((nav_overlay, current_image))
+    cv2.imshow("Annotator", combined)
+    cv2.waitKey(500)
 
 # Set up OpenCV window and mouse callback.
 cv2.namedWindow("Annotator", cv2.WINDOW_NORMAL)
@@ -173,29 +182,26 @@ while True:
     current_file = image_files[current_index]
     load_image_and_masks(current_file)
     
-    # Annotation loop for the current image.
     while True:
         overlay = draw_overlay()
-        cv2.imshow("Annotator", overlay)
+        # Display the overlay on the left and the original image on the right.
+        combined = np.hstack((overlay, current_image))
+        cv2.imshow("Annotator", combined)
         key = cv2.waitKey(1) & 0xFF
         
         if key == ord('s'):
-            # Save annotations and move to next image.
             save_annotations(current_file)
             current_index += 1
             break
         elif key == ord('d'):
-            # Navigate forward: show navigating message, then go to next image.
             show_navigating_message()
             current_index += 1
             break
         elif key == ord('a'):
-            # Navigate backward: show navigating message, then go to previous image.
             show_navigating_message()
             current_index = max(0, current_index - 1)
             break
         elif key == ord('q'):
-            # Quit and save the annotations JSON.
             cv2.destroyAllWindows()
             with open(os.path.join(output_folder, "annotations.json"), "w") as f:
                 json.dump(annotations, f, indent=2)

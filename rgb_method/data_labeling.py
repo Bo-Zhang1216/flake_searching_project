@@ -37,6 +37,6 @@ def add_label_to_data(json_path, label, output_path="data_labeled.json"):
 # Example usage:
 if __name__ == "__main__":
     # Set the path to your data file and desired label.
-    json_file_path = "data_background.json"  # Path to your original JSON file
+    json_file_path = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/rgb_method/data_false.json"  # Path to your original JSON file
     label = 0  # For example, 1 for few layers, 0 for not
     add_label_to_data(json_file_path, label)

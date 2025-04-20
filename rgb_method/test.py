@@ -17,7 +17,7 @@ def compute_background_color(img_rgb):
     return background
 
 # Load the saved model once
-model = keras.models.load_model('my_model_with_background.h5')
+model = keras.models.load_model('/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/rgb_method/TIT.h5')
 print("Loaded model from 'my_model.h5'")
 
 # Global variables to store current image data for the mouse callback
@@ -52,7 +52,7 @@ def mouse_callback(event, x, y, flags, param):
 def main():
     global current_img_rgb, current_img_display, current_background, current_filename
     
-    folder_path = "/Users/massimozhang/Desktop/coding/Ma Lab/Flake_searching_deep/deep_learning_data"
+    folder_path = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/TIT_data/100x"
 
     # Get list of image files (jpg, jpeg, png, bmp)
     valid_extensions = ('.jpg', '.jpeg', '.png', '.bmp')

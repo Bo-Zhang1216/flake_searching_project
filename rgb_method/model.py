@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from tqdm.keras import TqdmCallback  # progress bar callback
 
 # Load your labeled data from the JSON file (final_data.json)
-with open('final_data_1.json', 'r') as f:
+with open('/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/TIT_data/final_data.json', 'r') as f:
     data = json.load(f)
 
 # Extract features and labels.
@@ -64,5 +64,5 @@ test_loss, test_accuracy = model.evaluate(X_test, y_test, verbose=0)
 print(f"Test accuracy: {test_accuracy:.2f}")
 
 # Save the trained model locally
-model.save('my_model_with_background.h5')
-print("Model saved to 'my_model.h5'")
+model.save('TIT.h5')
+print("Model saved to 'TIT.h5'")

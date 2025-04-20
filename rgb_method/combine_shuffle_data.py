@@ -40,8 +40,8 @@ def combine_and_shuffle(file1, file2, output_file):
 
 if __name__ == '__main__':
     
-    file1 = "/Users/massimozhang/Desktop/coding/Ma Lab/Flake_searching_deep/final_data.json"
-    file2 = "/Users/massimozhang/Desktop/coding/Ma Lab/Flake_searching_deep/data_labeled_background.json"
-    output_file = "/Users/massimozhang/Desktop/coding/Ma Lab/Flake_searching_deep/final_data_1.json"
+    file1 = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/TIT_data/data_labeled_false.json"
+    file2 = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/TIT_data/data_labeled_true.json"
+    output_file = "/Users/massimozhang/Desktop/coding/Ma Lab/flake_searching_project/TIT_data/final_data.json"
 
     combine_and_shuffle(file1, file2, output_file)
